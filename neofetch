@@ -2286,7 +2286,7 @@ get_cpu() {
 
             if [[ -z $cpu ]]; then
                 cpu_speed="$(system_profiler SPHardwareDataType | grep 'Processor Speed')"
-                cpu_cores="$(system_profiler SPHardwareDataType | grep 'Number Of CPUs')"
+                cpu_cores="$(system_profiler SPHardwareDataType | grep -e 'Number Of CPUs' -e 'Total Number of Cores')"
                 cpu_name="$(system_profiler SPHardwareDataType | grep 'Processor Name')"
 
                 cpu="${cpu_cores##*: }x ${cpu_name##*: } @ ${cpu_speed##*: }"
