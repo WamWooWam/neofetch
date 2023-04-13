@@ -2286,7 +2286,7 @@ get_cpu() {
 
             if [[ -z $cpu ]]; then
                 cpu_speed="$(system_profiler SPHardwareDataType | grep 'Processor Speed')"
-                cpu_cores="$(system_profiler SPHardwareDataType | grep -e 'Number Of CPUs' -e 'Total Number of Cores')"
+                cpu_cores="$(system_profiler SPHardwareDataType | grep 'Number Of CPUs')"
                 cpu_name="$(system_profiler SPHardwareDataType | grep 'Processor Name')"
 
                 cpu="${cpu_cores##*: }x ${cpu_name##*: } @ ${cpu_speed##*: }"
@@ -2600,7 +2600,8 @@ get_gpu() {
 
             else
                 gpu="$(system_profiler SPDisplaysDataType |\
-                       awk -F': ' '/^\ *Chipset Model:/ {printf $2 ", "}')"
+                       sed '3q;d')"
+                gpu="${gpu%:}"
                 gpu="${gpu//\/ \$}"
                 gpu="${gpu%,*}"
 
@@ -4839,7 +4840,7 @@ cache() {
 
 get_cache_dir() {
     case $os in
-        "Mac OS X"|"macOS") cache_dir="/Library/Caches" ;;
+        "Mac OS X"|"macOS") cache_dir="~/Library/Caches" ;;
         *)          cache_dir="/tmp" ;;
     esac
 }
